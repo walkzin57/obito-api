@@ -1,0 +1,21 @@
+{
+  "name": "obito-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
+    "dotenv": "^16.0.0",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.0.0",
+    "express-session": "^1.17.3",
+    "fallen-yt": "^1.0.1",
+    "helmet": "^7.0.0",
+    "sanitize-html": "^2.11.0",
+    "yt-search": "^2.13.1"
+  }
+}

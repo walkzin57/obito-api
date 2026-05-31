@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title><%= title || 'Cadastro · OBITO API' %></title>
+<meta property="og:description" content="Melhor Base de API do momento">
+<meta property="og:image" content="https://raw.githubusercontent.com/uploader762/dat3/main/uploads/3fae03-1776528467067.jpg">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="/css/main.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+:root {
+--bg: #0a0e1a;
+--bg2: #0d1120;
+--surface: rgba(17, 24, 39, 0.75);
+--surface-hover: rgba(30, 41, 59, 0.85);
+--border: rgba(139, 92, 246, 0.2);
+--border-focus: rgba(139, 92, 246, 0.5);
+--accent: #8b5cf6;
+--accent-glow: rgba(139, 92, 246, 0.25);
+--accent-dark: #7c3aed;
+--text: #f1f5f9;
+--text-muted: #94a3b8;
+--error: #f87171;
+--error-bg: rgba(248, 113, 113, 0.12);
+--success: #34d399;
+--success-bg: rgba(52, 211, 153, 0.12);
+}
+
+body {
+font-family: 'Inter', sans-serif;
+background: var(--bg);
+min-height: 100vh;
+display: flex;
+justify-content: center;
+align-items: center;
+padding: 20px;
+position: relative;
+overflow-y: auto;
+}
+
+body::before {
+content: '';
+position: fixed;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-image: 
+linear-gradient(rgba(139, 92, 246, 0.06) 1px, transparent 1px),
+linear-gradient(90deg, rgba(139, 92, 246, 0.06) 1px, transparent 1px);
+background-size: 48px 48px;
+pointer-events: none;
+z-index: 0;
+}
+
+body::after {
+content: '';
+position: fixed;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background: 
+radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.12) 0%, transparent 60%),
+radial-gradient(circle at 80% 80%, rgba(167, 139, 250, 0.08) 0%, transparent 60%),
+radial-gradient(circle at 40% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+pointer-events: none;
+z-index: 0;
+}
+
+.auth-wrap {
+width: 100%;
+max-width: 420px;
+display: flex;
+flex-direction: column;
+gap: 20px;
+position: relative;
+z-index: 2;
+animation: fadeInUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+
+@keyframes fadeInUp {
+from {
+opacity: 0;
+transform: translateY(40px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+.auth-avatar {
+display: flex;
+justify-content: center;
+margin-bottom: 4px;
+}
+
+.avatar-wrapper {
+position: relative;
+}
+
+.avatar-image {
+width: 88px;
+height: 88px;
+border-radius: 22px;
+background-image: url('https://raw.githubusercontent.com/uploader762/dat3/main/uploads/3fae03-1776528467067.jpg');
+background-size: cover;
+background-position: center;
+border: 2px solid rgba(139, 92, 246, 0.4);
+box-shadow: 0 8px 24px rgba(139, 92, 246, 0.2);
+transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+
+.avatar-image:hover {
+transform: scale(1.02);
+border-color: rgba(139, 92, 246, 0.7);
+box-shadow: 0 12px 32px rgba(139, 92, 246, 0.35);
+}
+
+.avatar-wrapper::after {
+content: '';
+position: absolute;
+inset: -2px;
+border-radius: 24px;
+background: linear-gradient(135deg, var(--accent), transparent);
+opacity: 0;
+transition: opacity 0.3s ease;
+pointer-events: none;
+}
+
+.avatar-wrapper:hover::after {
+opacity: 0.3;
+}
+
+.auth-card {
+background: var(--surface);
+backdrop-filter: blur(20px);
+border-radius: 32px;
+padding: 36px 32px;
+display: flex;
+flex-direction: column;
+gap: 24px;
+border: 1px solid var(--border);
+transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 0.5px rgba(139, 92, 246, 0.1) inset;
+position: relative;
+overflow: hidden;
+}
+
+.auth-card::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+height: 2px;
+background: linear-gradient(90deg, transparent, var(--accent), var(--accent2), transparent);
+opacity: 0;
+transition: opacity 0.4s ease;
+}
+
+.auth-card:hover::before {
+opacity: 0.6;
+}
+
+.auth-card:hover {
+border-color: rgba(139, 92, 246, 0.35);
+transform: translateY(-4px);
+box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(139, 92, 246, 0.2) inset;
+}
+
+.notif {
+padding: 12px 16px;
+border-radius: 16px;
+font-size: 13px;
+font-weight: 500;
+display: none;
+align-items: center;
+gap: 10px;
+animation: slideDown 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+
+@keyframes slideDown {
+from {
+opacity: 0;
+transform: translateY(-12px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+.notif.error {
+background: var(--error-bg);
+border: 1px solid rgba(248, 113, 113, 0.35);
+color: var(--error);
+display: flex;
+}
+
+.notif.success {
+background: var(--success-bg);
+border: 1px solid rgba(52, 211, 153, 0.35);
+color: var(--success);
+display: flex;
+}
+
+.notif i {
+font-size: 18px;
+flex-shrink: 0;
+}
+
+.field {
+display: flex;
+flex-direction: column;
+gap: 8px;
+}
+
+.field-label {
+font-size: 11px;
+font-weight: 700;
+color: var(--text-muted);
+text-transform: uppercase;
+letter-spacing: 1.2px;
+}
+
+.field input {
+background: rgba(0, 0, 0, 0.35);
+border: 1px solid var(--border);
+border-radius: 16px;
+padding: 15px 18px;
+font-size: 14px;
+color: var(--text);
+font-family: 'Inter', sans-serif;
+transition: all 0.25s ease;
+outline: none;
+}
+
+.field input:focus {
+border-color: var(--accent);
+box-shadow: 0 0 0 4px var(--accent-glow);
+background: rgba(0, 0, 0, 0.5);
+transform: scale(1.01);
+}
+
+.field input::placeholder {
+color: var(--text-muted);
+opacity: 0.4;
+font-weight: 400;
+}
+
+.btn {
+border: none;
+border-radius: 16px;
+padding: 15px 20px;
+font-size: 14px;
+font-weight: 700;
+font-family: 'Inter', sans-serif;
+cursor: pointer;
+transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 10px;
+position: relative;
+overflow: hidden;
+}
+
+.btn-primary {
+background: linear-gradient(105deg, var(--accent) 0%, var(--accent-dark) 100%);
+color: white;
+border: 1px solid rgba(255, 255, 255, 0.12);
+box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+}
+
+.btn-primary::before {
+content: '';
+position: absolute;
+top: 0;
+left: -100%;
+width: 100%;
+height: 100%;
+background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+transition: left 0.5s ease;
+}
+
+.btn-primary:hover::before {
+left: 100%;
+}
+
+.btn-primary:hover {
+transform: translateY(-2px);
+box-shadow: 0 12px 28px rgba(139, 92, 246, 0.45);
+filter: brightness(1.05);
+}
+
+.btn-primary:active {
+transform: translateY(1px);
+}
+
+.btn-full {
+width: 100%;
+}
+
+.btn:disabled {
+opacity: 0.65;
+cursor: not-allowed;
+transform: none;
+}
+
+.auth-footer {
+text-align: center;
+font-size: 13px;
+color: var(--text-muted);
+padding: 12px;
+border-radius: 40px;
+background: rgba(0, 0, 0, 0.2);
+backdrop-filter: blur(8px);
+}
+
+.auth-footer a {
+color: var(--accent);
+text-decoration: none;
+font-weight: 700;
+transition: all 0.2s ease;
+position: relative;
+}
+
+.auth-footer a::after {
+content: '';
+position: absolute;
+bottom: -3px;
+left: 0;
+right: 0;
+height: 2px;
+background: linear-gradient(90deg, var(--accent), transparent);
+transform: scaleX(0);
+transition: transform 0.25s ease;
+}
+
+.auth-footer a:hover::after {
+transform: scaleX(1);
+}
+
+@media (max-width: 480px) {
+body {
+padding: 16px;
+align-items: center;
+}
+
+.auth-wrap {
+max-width: 100%;
+}
+
+.auth-card {
+padding: 28px 22px;
+gap: 20px;
+}
+
+.field input {
+padding: 13px 16px;
+}
+
+.btn {
+padding: 13px 18px;
+}
+
+.avatar-image {
+width: 76px;
+height: 76px;
+border-radius: 20px;
+}
+}
+
+@media (max-width: 380px) {
+.auth-card {
+padding: 24px 18px;
+gap: 18px;
+}
+
+.avatar-image {
+width: 68px;
+height: 68px;
+border-radius: 18px;
+}
+}
+
+@media (min-width: 768px) {
+.auth-wrap {
+max-width: 440px;
+}
+
+.auth-card {
+padding: 40px 36px;
+gap: 28px;
+}
+}
+
+.loading-spinner {
+display: inline-block;
+width: 16px;
+height: 16px;
+border: 2px solid rgba(255, 255, 255, 0.3);
+border-top-color: white;
+border-radius: 50%;
+animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+to { transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+<div class="auth-wrap">
+<div class="auth-avatar">
+<div class="avatar-wrapper">
+<div class="avatar-image"></div>
+</div>
+</div>
+
+<div class="auth-card">
+<div class="notif" id="notif"></div>
+
+<div class="field">
+<span class="field-label">usuário</span>
+<input type="text" id="username" placeholder="escolha um usuário">
+</div>
+
+<div class="field">
+<span class="field-label">e-mail</span>
+<input type="email" id="email" placeholder="seu@email.com">
+</div>
+
+<div class="field">
+<span class="field-label">senha</span>
+<input type="password" id="password" placeholder="mín. 6 caracteres">
+</div>
+
+<button class="btn btn-primary btn-full" id="regBtn">
+<i class="bi bi-person-plus"></i> criar conta
+</button>
+</div>
+
+<div class="auth-footer">
+já tem conta? <a href="/login">entrar</a>
+</div>
+</div>
+
+<script>
+const notif = document.getElementById('notif');
+
+function showNotif(msg, tipo) {
+notif.className = 'notif ' + tipo;
+notif.innerHTML = `<i class="bi bi-${tipo === 'error' ? 'x-circle' : 'check-circle'}"></i> ${msg}`;
+setTimeout(() => {
+if (notif.className === 'notif ' + tipo) {
+notif.style.opacity = '0';
+setTimeout(() => {
+notif.className = 'notif';
+notif.style.opacity = '';
+}, 300);
+}
+}, 4000);
+}
+
+document.getElementById('regBtn').addEventListener('click', async () => {
+const username = document.getElementById('username').value.trim();
+const email = document.getElementById('email').value.trim();
+const password = document.getElementById('password').value;
+
+if (!username || !email || !password) {
+showNotif('preencha todos os campos', 'error');
+document.getElementById('username').focus();
+return;
+}
+
+if (password.length < 6) {
+showNotif('a senha deve ter no mínimo 6 caracteres', 'error');
+document.getElementById('password').focus();
+return;
+}
+
+const btn = document.getElementById('regBtn');
+const originalHTML = btn.innerHTML;
+btn.disabled = true;
+btn.innerHTML = '<span class="loading-spinner"></span> criando...';
+
+try {
+const r = await fetch('/api/registro', {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ username, email, password })
+});
+const d = await r.json();
+if (d.success) {
+showNotif('conta criada! redirecionando...', 'success');
+setTimeout(() => window.location.href = '/dash', 700);
+} else {
+showNotif(d.message || 'erro ao criar conta', 'error');
+btn.disabled = false;
+btn.innerHTML = originalHTML;
+}
+} catch {
+showNotif('erro de conexão. tente novamente', 'error');
+btn.disabled = false;
+btn.innerHTML = originalHTML;
+}
+});
+
+document.addEventListener('keydown', e => {
+if (e.key === 'Enter') {
+const btn = document.getElementById('regBtn');
+if (!btn.disabled) btn.click();
+}
+});
+</script>
+</body>
+</html>
